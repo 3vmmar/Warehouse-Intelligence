@@ -1,3 +1,4 @@
+
 # Warehouse Intelligence Lab
 
 A complete CSAI 301 project covering classical search, informed search, local search, reinforcement learning, visualization, controlled experiments, and a premium animated web laboratory.
