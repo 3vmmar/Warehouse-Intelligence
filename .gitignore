@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+
+# Node / React
+node_modules/
+dist/
+.vite/
+
+# Results / large artifacts
+results/*.gif
+results/*.mp4
+*.npy
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+.claude/
+
+# Python tooling
+.pytest_cache/
+.ruff_cache/
+
+# Local runtime exports
+results/*.npy

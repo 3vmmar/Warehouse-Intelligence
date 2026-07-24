@@ -1,0 +1,27 @@
+{
+  "environment_seeds": [
+    7,
+    11,
+    19
+  ],
+  "rows": 32,
+  "cols": 32,
+  "obstacle_ratio": 0.22,
+  "state_space_sizes": [
+    1562,
+    1606,
+    1582
+  ],
+  "phase1_algorithms": 11,
+  "phase2_success_rate": 1.0,
+  "files": [
+    "phase1_comparison.png",
+    "phase1_raw.csv",
+    "phase1_summary.json",
+    "phase2_learning_curve.png",
+    "phase2_policy.png",
+    "phase2_summary.json",
+    "q_values_final.csv",
+    "q_values_midpoint.csv"
+  ]
+}

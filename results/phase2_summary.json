@@ -1,0 +1,32 @@
+[
+  {
+    "seed": 7,
+    "episodes": 1400,
+    "training_successes": 1298,
+    "final_100_success_rate": 1.0,
+    "evaluation_success": true,
+    "policy_cost": 72.0,
+    "training_runtime_ms": 1655.058000003919,
+    "best_episode_reward": 168.0
+  },
+  {
+    "seed": 11,
+    "episodes": 1400,
+    "training_successes": 1336,
+    "final_100_success_rate": 1.0,
+    "evaluation_success": true,
+    "policy_cost": 38.0,
+    "training_runtime_ms": 1202.1954999945592,
+    "best_episode_reward": 170.0
+  },
+  {
+    "seed": 19,
+    "episodes": 1400,
+    "training_successes": 1300,
+    "final_100_success_rate": 1.0,
+    "evaluation_success": true,
+    "policy_cost": 73.0,
+    "training_runtime_ms": 1684.5496000023559,
+    "best_episode_reward": 167.0
+  }
+]
