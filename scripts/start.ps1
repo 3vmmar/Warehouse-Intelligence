@@ -25,10 +25,12 @@ function Test-CurrentApi {
         $status = Invoke-RestMethod "$apiUrl/project-status" -TimeoutSec 2
         return (
             $health.status -eq "ok" -and
-            $health.version -eq "2.0.0" -and
-            $health.phases -eq 2 -and
-            $status.phase1.status -eq "complete" -and
-            $status.phase2.status -eq "complete"
+            $health.version -eq "3.0.0" -and
+            $health.architecture -eq "integrated" -and
+            $health.modules -eq 2 -and
+            $status.project.status -eq "complete" -and
+            $status.search.status -eq "complete" -and
+            $status.learning.status -eq "complete"
         )
     }
     catch {

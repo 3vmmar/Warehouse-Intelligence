@@ -90,6 +90,8 @@ export interface ComparisonRow {
   mean_runtime_ms: number;
   std_runtime_ms: number;
   mean_work_units: number;
+  mean_memory_units: number;
+  std_memory_units: number;
   theoretically_complete: boolean;
   theoretically_optimal: boolean;
   optimality_scope: string;
@@ -173,4 +175,3 @@ export interface TrainRequest extends EnvironmentRequestBody {
   epsilon_end: number;
   seed: number;
 }
-

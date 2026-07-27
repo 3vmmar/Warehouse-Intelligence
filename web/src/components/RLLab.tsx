@@ -30,7 +30,7 @@ export function RLLab() {
   return (
     <div className="space-y-10 pb-24 pt-12">
       <SectionHeading
-        eyebrow="Phase 02 / Reinforcement learning"
+        eyebrow="Learning engine / Reinforcement learning"
         title="Turn experience into policy."
         description="The robot learns the exact same pickup-and-delivery problem through tabular Q-learning. Tune the core hyperparameters, inspect learning progress, and compare midpoint Q-values with the final policy."
       />

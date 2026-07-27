@@ -12,7 +12,9 @@ from api import (
 
 
 def test_health_and_generation_contract():
-    assert health()["phases"] == 2
+    payload = health()
+    assert payload["architecture"] == "integrated"
+    assert payload["modules"] == 2
     world = generate(GenerateRequest(rows=32, cols=32, seed=7))
     assert 1_000 <= world["state_space_size"] <= 10_000
 
@@ -30,6 +32,7 @@ def test_solve_compare_and_train_endpoints():
     assert result["metrics"]["solution_found"]
     comparison = compare(CompareRequest(**common, seed=9, quick=True))
     assert len(comparison["summary"]) == 11
+    assert all(row["mean_memory_units"] > 0 for row in comparison["summary"])
     learning = train(
         TrainRequest(
             **common,

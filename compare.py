@@ -1,4 +1,4 @@
-"""Reproducible experiments and exports for both phases.
+"""Reproducible experiments and exports for the integrated AI system.
 
 Run `python compare.py` to regenerate every CSV, JSON, and PNG used by the
 report. The same functions power the web comparison dashboard.
@@ -25,10 +25,10 @@ from q_learning import QLearningConfig, QLearningResult, train_q_learning
 from simulated_annealing import simulated_annealing
 from state import SearchResult
 from ucs import ucs
-from visualization import save_phase1_comparison, save_policy_map, save_q_learning_curve
+from visualization import save_policy_map, save_q_learning_curve, save_search_comparison
 
 
-def run_phase1_suite(
+def run_search_suite(
     environment: WarehouseEnvironment,
     seed: int = 7,
     quick: bool = False,
@@ -99,6 +99,7 @@ def summarize_rows(rows: list[dict]) -> list[dict]:
         costs = [float(row["path_cost"]) for row in successful]
         runtimes = [float(row["runtime_ms"]) for row in group]
         work = [float(row["work_units"]) for row in group]
+        memory = [float(row["memory_units"]) for row in group]
         summary.append(
             {
                 "algorithm": algorithm,
@@ -111,6 +112,8 @@ def summarize_rows(rows: list[dict]) -> list[dict]:
                 "mean_runtime_ms": mean(runtimes),
                 "std_runtime_ms": stdev(runtimes) if len(runtimes) > 1 else 0.0,
                 "mean_work_units": mean(work),
+                "mean_memory_units": mean(memory),
+                "std_memory_units": stdev(memory) if len(memory) > 1 else 0.0,
                 "theoretically_complete": base["theoretically_complete"],
                 "theoretically_optimal": base["theoretically_optimal"],
                 "optimality_scope": base["optimality_scope"],
@@ -137,7 +140,7 @@ def run_full_experiment(
     for seed in seeds:
         environment = generate_environment(rows, cols, obstacle_ratio, seed)
         environments.append(environment)
-        raw_rows.extend(results_to_rows(run_phase1_suite(environment, seed, quick), seed))
+        raw_rows.extend(results_to_rows(run_search_suite(environment, seed, quick), seed))
         q_config = QLearningConfig(
             episodes=350 if quick else q_episodes,
             max_steps_per_episode=260 if quick else 420,
@@ -146,25 +149,26 @@ def run_full_experiment(
         q_results.append(train_q_learning(environment, q_config))
 
     summary = summarize_rows(raw_rows)
-    _write_csv(output / "phase1_raw.csv", raw_rows)
-    _write_json(output / "phase1_summary.json", summary)
+    _write_csv(output / "search_runs.csv", raw_rows)
+    _write_csv(output / "search_summary.csv", summary)
+    _write_json(output / "search_summary.json", summary)
     _write_json(
-        output / "phase2_summary.json",
+        output / "learning_summary.json",
         [_compact_q_result(result, seed) for result, seed in zip(q_results, seeds, strict=True)],
     )
     _write_q_values(output / "q_values_midpoint.csv", environments[0], q_results[0], midpoint=True)
     _write_q_values(output / "q_values_final.csv", environments[0], q_results[0], midpoint=False)
-    save_phase1_comparison(summary, output / "phase1_comparison.png")
-    save_q_learning_curve(q_results[0], output / "phase2_learning_curve.png")
-    save_policy_map(environments[0], q_results[0], output / "phase2_policy.png")
+    save_search_comparison(summary, output / "search_comparison.png")
+    save_q_learning_curve(q_results[0], output / "learning_curve.png")
+    save_policy_map(environments[0], q_results[0], output / "learned_policy.png")
     manifest = {
         "environment_seeds": list(seeds),
         "rows": rows,
         "cols": cols,
         "obstacle_ratio": obstacle_ratio,
         "state_space_sizes": [environment.state_space_size for environment in environments],
-        "phase1_algorithms": len(summary),
-        "phase2_success_rate": mean(result.final_100_success_rate for result in q_results),
+        "search_configurations": len(summary),
+        "learning_success_rate": mean(result.final_100_success_rate for result in q_results),
         "files": sorted(path.name for path in output.iterdir() if path.is_file()),
     }
     _write_json(output / "experiment_manifest.json", manifest)

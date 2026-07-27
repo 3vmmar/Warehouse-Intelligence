@@ -12,7 +12,7 @@ from astar import GUARANTEES as ASTAR_GUARANTEES
 from astar import astar
 from bfs import GUARANTEES as BFS_GUARANTEES
 from bfs import bfs
-from compare import results_to_rows, run_phase1_suite, summarize_rows
+from compare import results_to_rows, run_search_suite, summarize_rows
 from dfs import GUARANTEES as DFS_GUARANTEES
 from dfs import dfs
 from environment import WarehouseEnvironment, generate_environment
@@ -32,7 +32,7 @@ from ucs import ucs
 
 app = FastAPI(
     title="Warehouse Intelligence Lab API",
-    version="2.0.0",
+    version="3.0.0",
     description="CSAI 301 search and reinforcement-learning laboratory",
 )
 app.add_middleware(
@@ -114,7 +114,12 @@ CATALOG = [
 
 @app.get("/health")
 def health() -> dict:
-    return {"status": "ok", "version": "2.0.0", "phases": 2}
+    return {
+        "status": "ok",
+        "version": "3.0.0",
+        "architecture": "integrated",
+        "modules": 2,
+    }
 
 
 @app.get("/algorithms")
@@ -133,14 +138,15 @@ def algorithms() -> list[dict]:
 @app.get("/project-status")
 def project_status() -> dict:
     return {
-        "phase1": {"status": "complete", "algorithms": 11, "heuristics": 2},
-        "phase2": {"status": "complete", "algorithm": "Tabular Q-learning"},
+        "project": {"status": "complete", "architecture": "integrated"},
+        "search": {"status": "complete", "configurations": 11, "heuristics": 2},
+        "learning": {"status": "complete", "algorithm": "Tabular Q-learning"},
         "state_space_target": "1K–10K",
         "deliverables": [
             "interactive laboratory",
             "reproducible results",
-            "report",
-            "video scripts",
+            "formal report",
+            "recorded demonstration",
         ],
     }
 
@@ -174,7 +180,7 @@ def solve(request: SolveRequest) -> dict:
 @app.post("/compare")
 def compare(request: CompareRequest) -> dict:
     environment = _build_environment(request)
-    results = run_phase1_suite(environment, request.seed, request.quick)
+    results = run_search_suite(environment, request.seed, request.quick)
     rows = results_to_rows(results, request.seed)
     return {
         "summary": summarize_rows(rows),

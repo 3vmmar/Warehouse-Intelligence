@@ -67,6 +67,24 @@ def test_heuristics_are_admissible_at_the_start(small_environment):
     assert euclidean_heuristic(small_environment.initial_state, small_environment) <= optimal
 
 
+@pytest.mark.parametrize("heuristic", [manhattan_heuristic, euclidean_heuristic])
+def test_heuristics_are_consistent_across_legal_transitions(small_environment, heuristic):
+    for state in small_environment.all_states():
+        for action in small_environment.legal_actions(state):
+            next_state = small_environment.transition(state, action)
+            cost = small_environment.step_cost(state, action, next_state)
+            assert heuristic(state, small_environment) <= (
+                cost + heuristic(next_state, small_environment) + 1e-9
+            )
+
+
+def test_manhattan_astar_reduces_expansions_against_ucs(target_environment):
+    uniform = ucs(target_environment)
+    informed = astar(target_environment, "manhattan")
+    assert informed.metrics.path_cost == uniform.metrics.path_cost
+    assert informed.metrics.nodes_expanded < uniform.metrics.nodes_expanded
+
+
 def test_ids_trace_is_bounded_on_target_environment(target_environment):
     result = ids(target_environment, max_events=2_000)
     validate_result(target_environment, result)

@@ -21,7 +21,7 @@ export function SearchLab() {
   return (
     <div className="space-y-10 pb-24 pt-12">
       <SectionHeading
-        eyebrow="Phase 01 / Interactive laboratory"
+        eyebrow="Search engine / Interactive laboratory"
         title="Watch intelligence search."
         description="Generate a rubric-compliant weighted warehouse, select any required algorithm, replay its reasoning, and inspect empirical metrics beside theoretical guarantees."
       />
@@ -118,4 +118,3 @@ export function SearchLab() {
     </div>
   );
 }
-

@@ -17,7 +17,7 @@ export function Overview() {
             animate={{ opacity: 1, y: 0 }}
             className="mb-7 inline-flex items-center gap-2 rounded-full border border-emerald-300/20 bg-emerald-300/[0.07] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-emerald-200"
           >
-            <span className="status-dot status-live" /> Both phases operational
+            <span className="status-dot status-live" /> Integrated system operational
           </motion.div>
           <motion.h1
             initial={{ opacity: 0, y: 24 }}
@@ -71,7 +71,7 @@ export function Overview() {
               ["11", "evaluated configurations"],
               ["02", "admissible heuristics"],
               [environment?.state_space_size.toLocaleString() ?? "1K+", "modeled states"],
-              ["02", "complete phases"],
+              ["01", "integrated AI system"],
             ].map(([value, label]) => (
               <div key={label} className="bg-[#0b0f19] px-4 py-4">
                 <div className="font-mono text-xl font-semibold text-white">{value}</div>
@@ -110,31 +110,31 @@ export function Overview() {
 
       <section className="space-y-10">
         <SectionHeading
-          eyebrow="Assignment architecture"
-          title="Two phases. One consistent world model."
-          description="The same state, action, transition, and cost definitions flow from classical search into reinforcement learning—exactly as the project brief requires."
+          eyebrow="Integrated architecture"
+          title="One system. One consistent world model."
+          description="The same state, action, transition, and cost definitions flow through planning, optimization, and reinforcement learning as one coherent intelligent system."
         />
         <div className="grid gap-5 lg:grid-cols-2">
           <GlassCard className="group overflow-hidden p-7 md:p-9">
-            <div className="phase-card-accent phase-one" />
+            <div className="system-card-accent search-accent" />
             <div className="relative">
               <div className="flex items-start justify-between gap-4">
-                <div><span className="eyebrow">Phase 01 / Week 4</span><h3 className="mt-3 font-display text-3xl font-semibold tracking-tight text-white">Search intelligence</h3></div>
-                <span className="score-chip">50 pts</span>
+                <div><span className="eyebrow">Search engine / Planning</span><h3 className="mt-3 font-display text-3xl font-semibold tracking-tight text-white">Search and optimization</h3></div>
+                <span className="score-chip">11 configs</span>
               </div>
               <p className="mt-5 max-w-xl text-sm leading-7 text-slate-400">Uninformed, informed, and local search compete on the same weighted warehouse. Every run exposes path quality, work, memory, runtime, completeness, and optimality.</p>
-              <button onClick={() => setView("search")} className="text-link mt-7">Explore Phase 1 <span>→</span></button>
+              <button onClick={() => setView("search")} className="text-link mt-7">Explore search lab <span>→</span></button>
             </div>
           </GlassCard>
           <GlassCard className="group overflow-hidden p-7 md:p-9" delay={0.08}>
-            <div className="phase-card-accent phase-two" />
+            <div className="system-card-accent learning-accent" />
             <div className="relative">
               <div className="flex items-start justify-between gap-4">
-                <div><span className="eyebrow">Phase 02 / Week 6</span><h3 className="mt-3 font-display text-3xl font-semibold tracking-tight text-white">Learned intelligence</h3></div>
-                <span className="score-chip score-green">50 pts</span>
+                <div><span className="eyebrow">Learning engine / Adaptation</span><h3 className="mt-3 font-display text-3xl font-semibold tracking-tight text-white">Reinforcement learning</h3></div>
+                <span className="score-chip score-green">Q-policy</span>
               </div>
               <p className="mt-5 max-w-xl text-sm leading-7 text-slate-400">Tabular Q-learning learns a pickup-and-delivery policy using explicit α, γ, ε-decay, midpoint/final Q snapshots, reward analysis, and a measurable final policy.</p>
-              <button onClick={() => setView("learning")} className="text-link mt-7 text-emerald-300">Explore Phase 2 <span>→</span></button>
+              <button onClick={() => setView("learning")} className="text-link mt-7 text-emerald-300">Explore learning lab <span>→</span></button>
             </div>
           </GlassCard>
         </div>

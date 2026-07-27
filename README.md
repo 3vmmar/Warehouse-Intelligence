@@ -13,13 +13,13 @@ Made by:
 
 Under the supervision of **Dr Doaa**.
 
-## Assignment coverage
+## System coverage
 
-- Phase 1: BFS, DFS, UCS, IDS, Greedy Best-First with Manhattan and Euclidean heuristics, A* with both heuristics, Hill Climbing, Simulated Annealing, and a Genetic Algorithm.
-- Phase 2: tabular Q-learning on the same pickup-and-delivery problem, including explicit state/action/reward definitions, epsilon-greedy exploration, learning curves, midpoint/final Q-value exports, and final-policy evaluation.
+- Search and optimization: BFS, DFS, UCS, IDS, Greedy Best-First with Manhattan and Euclidean heuristics, A* with both heuristics, Hill Climbing, Simulated Annealing, and a Genetic Algorithm.
+- Learning and policy: tabular Q-learning on the same pickup-and-delivery problem, including explicit state/action/reward definitions, epsilon-greedy exploration, learning curves, midpoint/final Q-value exports, and final-policy evaluation.
 - Analysis: reproducible three-seed experiments, raw CSV data, JSON summaries, comparison charts, Q-learning charts, and policy maps.
 - Presentation: animated search traces, evolving local-search candidates, comparison dashboards, and the learned policy.
-- Submission support: formal report, oral-defense guide, and one video script per phase.
+- Submission support: formal report, oral-defense guide, and a recorded demonstration checklist.
 
 ## Clean project structure
 
@@ -38,7 +38,7 @@ CSAI 301 Project/
 |-- genetic.py
 |-- q_learning.py
 |-- visualization.py
-|-- compare.py                  # Reproducible Phase 1 + Phase 2 experiments
+|-- compare.py                  # Reproducible search + learning experiments
 |-- api.py                      # FastAPI bridge for the web lab
 |-- search_core.py
 |-- local_search_core.py
@@ -92,10 +92,10 @@ This runs the Python tests, Ruff static checks, frontend lint, and a production 
 
 ## Problem model
 
-The robot begins at `S`, must visit pickup `P`, and then deliver at `D`. A state is `(row, column, has_package)`. Actions are up, down, left, and right. Walls are invalid; normal, medium, and heavy terrain cost 1, 2, and 4. This makes the difference between move-optimal BFS and cost-optimal UCS/A* measurable. Default 32 by 32 worlds model roughly 1,500 reachable states, satisfying the required 1,000-10,000 range.
+The robot begins at `S`, must visit pickup `P`, and then deliver at `D`. A state is `(row, column, has_package)`. Actions are up, down, left, and right. Walls are invalid; normal, medium, and heavy terrain cost 1, 2, and 4. This makes the difference between move-optimal BFS and cost-optimal UCS/A* measurable. For seed 7, 781 traversable cells × two package-status values produce 1,562 modeled states, satisfying the required 1,000-10,000 range.
 
 ## Key results
 
-Across seeds 7, 11, and 19, all eleven Phase 1 configurations found valid solutions. UCS and both A* configurations achieved the lowest mean path cost (59.0). Manhattan A* averaged 308 expansions versus 1,152.7 for UCS. All three Q-learning runs reached a 100% success rate over the final 100 episodes and produced a valid evaluation policy.
+Across seeds 7, 11, and 19, all eleven search and optimization configurations found valid solutions. UCS and both A* configurations achieved the lowest mean path cost (59.0). Manhattan A* averaged 308 expansions versus 1,152.7 for UCS. BFS used the leanest mean memory proxy (51 units), while the Genetic Algorithm's population required 12,202.7 units. All three Q-learning runs reached a 100% success rate over the final 100 episodes and produced a valid evaluation policy.
 
-See `report/PROJECT_REPORT.md` and `results/experiment_manifest.json` for the complete interpretation and evidence trail.
+See `report/PROJECT_REPORT.md`, `report/ORAL_DEFENSE_GUIDE.md`, `results/search_summary.csv`, and `results/experiment_manifest.json` for the complete interpretation and evidence trail.

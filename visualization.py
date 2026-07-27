@@ -1,4 +1,4 @@
-"""Report-ready visualizations for both project phases.
+"""Report-ready visualizations for the integrated AI system.
 
 The React application provides interactive animation; this module creates
 static PNG evidence suitable for the submitted report and presentation.
@@ -23,7 +23,7 @@ PALETTE = {
 }
 
 
-def save_phase1_comparison(summary: list[dict], output_path: str | Path) -> Path:
+def save_search_comparison(summary: list[dict], output_path: str | Path) -> Path:
     plt = _plt()
     output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -31,8 +31,10 @@ def save_phase1_comparison(summary: list[dict], output_path: str | Path) -> Path
     costs = [row.get("mean_path_cost") or 0 for row in summary]
     runtimes = [row.get("mean_runtime_ms") or 0 for row in summary]
     work = [row.get("mean_work_units") or 0 for row in summary]
+    memory = [row.get("mean_memory_units") or 0 for row in summary]
 
-    fig, axes = plt.subplots(1, 3, figsize=(17, 7), facecolor=PALETTE["background"])
+    fig, axes_grid = plt.subplots(2, 2, figsize=(15, 10), facecolor=PALETTE["background"])
+    axes = axes_grid.flatten()
     for axis in axes:
         axis.set_facecolor(PALETTE["panel"])
         axis.tick_params(colors=PALETTE["muted"], labelsize=8)
@@ -40,21 +42,29 @@ def save_phase1_comparison(summary: list[dict], output_path: str | Path) -> Path
             spine.set_visible(False)
         axis.grid(axis="x", color="#273148", alpha=0.55, linewidth=0.7)
 
-    colors = [PALETTE["cyan"], PALETTE["violet"], PALETTE["green"]]
+    colors = [PALETTE["cyan"], PALETTE["violet"], PALETTE["green"], PALETTE["amber"]]
     for axis, values, title, color in zip(
         axes,
-        (costs, runtimes, work),
-        ("Mean solution cost", "Mean runtime (ms)", "Mean search work"),
+        (costs, runtimes, work, memory),
+        (
+            "Mean solution cost",
+            "Mean runtime (ms)",
+            "Mean search work",
+            "Mean memory units",
+        ),
         colors,
         strict=True,
     ):
         positions = list(range(len(labels)))
         axis.barh(positions, values, color=color, alpha=0.88)
-        axis.set_yticks(positions, labels if axis is axes[0] else ["" for _ in labels])
+        axis.set_yticks(
+            positions,
+            labels if axis in (axes[0], axes[2]) else ["" for _ in labels],
+        )
         axis.invert_yaxis()
         axis.set_title(title, color=PALETTE["text"], fontsize=12, fontweight="bold", pad=14)
     fig.suptitle(
-        "Phase 1 — Search Algorithm Comparison",
+        "Search and Optimization Comparison",
         color=PALETTE["text"],
         fontsize=18,
         fontweight="bold",
@@ -96,9 +106,7 @@ def save_q_learning_curve(result: QLearningResult, output_path: str | Path) -> P
     axes[1].set_ylabel("Success %", color=PALETTE["muted"])
     axes[1].set_xlabel("Episode", color=PALETTE["muted"])
     axes[1].legend(frameon=False, labelcolor=PALETTE["text"], loc="upper left")
-    fig.suptitle(
-        "Phase 2 — Q-Learning Convergence", color=PALETTE["text"], fontsize=18, fontweight="bold"
-    )
+    fig.suptitle("Q-Learning Convergence", color=PALETTE["text"], fontsize=18, fontweight="bold")
     fig.tight_layout(rect=(0, 0, 1, 0.95))
     fig.savefig(output_path, dpi=180, bbox_inches="tight", facecolor=fig.get_facecolor())
     plt.close(fig)

@@ -12,16 +12,18 @@
     1606,
     1582
   ],
-  "phase1_algorithms": 11,
-  "phase2_success_rate": 1.0,
+  "search_configurations": 11,
+  "learning_success_rate": 1.0,
   "files": [
-    "phase1_comparison.png",
-    "phase1_raw.csv",
-    "phase1_summary.json",
-    "phase2_learning_curve.png",
-    "phase2_policy.png",
-    "phase2_summary.json",
+    "experiment_manifest.json",
+    "learned_policy.png",
+    "learning_curve.png",
+    "learning_summary.json",
     "q_values_final.csv",
-    "q_values_midpoint.csv"
+    "q_values_midpoint.csv",
+    "search_comparison.png",
+    "search_runs.csv",
+    "search_summary.csv",
+    "search_summary.json"
   ]
 }

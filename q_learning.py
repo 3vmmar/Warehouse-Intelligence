@@ -1,4 +1,4 @@
-"""Tabular Q-learning for Phase 2 of the CSAI 301 project."""
+"""Tabular Q-learning for the warehouse intelligence system."""
 
 from __future__ import annotations
 

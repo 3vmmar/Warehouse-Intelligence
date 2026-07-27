@@ -1,15 +1,15 @@
 # Warehouse Intelligence Lab
 
-## CSAI 301 Artificial Intelligence Project - Phases 1 and 2
+## CSAI 301 Artificial Intelligence Project - Integrated Search and Learning System
 
 **Made by:** Ammar Ahmed · Ahmed Sameh · Kareem Wael  
 **Under the supervision of:** Dr Doaa
 
 ### Executive summary
 
-This project builds a single warehouse pickup-and-delivery problem and studies it through classical search, heuristic search, local optimization, and reinforcement learning. The shared model prevents the phases from becoming unrelated demonstrations: every method uses the same state semantics, actions, obstacles, pickup rule, delivery rule, and weighted movement costs.
+This project builds a single warehouse pickup-and-delivery problem and studies it through classical search, heuristic search, local optimization, and reinforcement learning. The shared model makes every subsystem part of one coherent intelligent application: every method uses the same state semantics, actions, obstacles, pickup rule, delivery rule, and weighted movement costs.
 
-The default 32 by 32 environment contains approximately 1,500 valid modeled states, satisfying the assignment target of 1,000-10,000 states. Phase 1 implements every required algorithm and compares eleven configurations. Phase 2 learns a policy with tabular Q-learning and exports both midpoint and final Q-values. A React web laboratory visualizes search traces, local-search candidate evolution, controlled comparisons, learning curves, Q-value change, and the final policy.
+The default 32 by 32 environment contains approximately 1,500 valid modeled states, satisfying the assignment target of 1,000-10,000 states. The search study implements every required algorithm and compares eleven configurations. The learning study trains a policy with tabular Q-learning and exports both midpoint and final Q-values. A React web laboratory visualizes search traces, local-search candidate evolution, controlled comparisons, learning curves, Q-value change, and the final policy.
 
 Three-seed experiments show the intended trade-offs. UCS and both A* configurations returned the lowest mean weighted cost (59.0), while Manhattan A* reduced mean search work from 1,152.7 UCS expansions to 308. Q-learning achieved a 100% success rate over the final 100 episodes for all three seeds and generated a valid evaluation policy in every run.
 
@@ -25,7 +25,7 @@ Transition cost: entering normal, medium, or heavy terrain costs 1, 2, or 4 unit
 
 Terminal condition: `has_package = true` and the robot is at `D`. Pickup is automatic when the robot enters `P`.
 
-Environment generation uses a reproducible random seed and rejects maps unless both start-to-pickup and pickup-to-delivery paths exist. The default 32 by 32 grid with a 0.22 obstacle ratio generated 1,562, 1,606, and 1,582 states for seeds 7, 11, and 19.
+Environment generation uses a reproducible random seed and rejects maps unless both start-to-pickup and pickup-to-delivery paths exist. State-space size is calculated as `traversable cells x 2 package-status values`. For seed 7, `781 x 2 = 1,562` states; seeds 11 and 19 produce 1,606 and 1,582 states. All three satisfy the required 1,000-10,000 range.
 
 ## 2. Software architecture
 
@@ -33,7 +33,7 @@ The root-level architecture mirrors the algorithm list in the brief. `environmen
 
 This separation provides three benefits: each algorithm remains short enough to explain orally, tests can isolate one behavior at a time, and the web layer cannot silently use a different implementation from the submitted Python code.
 
-## 3. Phase 1 - search algorithms
+## 3. Search algorithms
 
 ### 3.1 Uninformed search
 
@@ -70,37 +70,37 @@ The Genetic Algorithm maintains a population with tournament selection, elitism,
 
 No finite run of these three methods is complete or optimal. Their stochastic nature is why fixed seeds and multiple runs are required for fair analysis.
 
-## 4. Phase 1 experimental evaluation
+## 4. Search experimental evaluation
 
-The controlled experiment used 32 by 32 weighted warehouses, obstacle ratio 0.22, and seeds 7, 11, and 19. Each configuration solved the environment generated from the same seed. Reported work is nodes expanded for graph search and candidate evaluations for local search. Times are implementation- and machine-dependent; relative work and solution quality are more portable evidence.
+The controlled experiment used 32 by 32 weighted warehouses, obstacle ratio 0.22, and seeds 7, 11, and 19. Each configuration solved the environment generated from the same seed. Reported work is nodes expanded for graph search and candidate evaluations for local search. Memory is an implementation-level proxy: graph methods report peak frontier states, while local methods report encoded action slots retained by the active trajectory or population. Times are machine-dependent; work, memory, and solution quality provide reproducible structural evidence.
 
-| Configuration | Success | Mean cost | Mean runtime (ms) | Mean work | Complete | Cost-optimal |
-|---|---:|---:|---:|---:|:---:|:---:|
-| BFS | 100% | 68.3 | 7.8 | 1,223.7 | Yes | No |
-| DFS | 100% | 340.3 | 7.0 | 1,019.0 | Yes* | No |
-| UCS | 100% | 59.0 | 8.5 | 1,152.7 | Yes | Yes |
-| IDS | 100% | 68.3 | 790.3 | 132,846.3 | Yes | No |
-| Greedy - Manhattan | 100% | 76.0 | 0.5 | 57.0 | Yes* | No |
-| Greedy - Euclidean | 100% | 68.7 | 0.4 | 49.3 | Yes* | No |
-| A* - Manhattan | 100% | 59.0 | 2.4 | 308.0 | Yes | Yes |
-| A* - Euclidean | 100% | 59.0 | 4.1 | 516.3 | Yes | Yes |
-| Hill Climbing | 100% | 82.7 | 1,789.4 | 2,406.0 | No | No |
-| Simulated Annealing | 100% | 82.7 | 2,785.2 | 3,204.0 | No | No |
-| Genetic Algorithm | 100% | 84.0 | 4,146.2 | 8,884.0 | No | No |
+| Configuration | Success | Mean cost | Mean runtime (ms) | Mean work | Mean memory | Complete | Cost-optimal |
+|---|---:|---:|---:|---:|---:|:---:|:---:|
+| BFS | 100% | 68.3 | 7.8 | 1,223.7 | 51.0 | Yes | No |
+| DFS | 100% | 340.3 | 7.0 | 1,019.0 | 287.0 | Yes* | No |
+| UCS | 100% | 59.0 | 8.5 | 1,152.7 | 57.3 | Yes | Yes |
+| IDS | 100% | 68.3 | 790.3 | 132,846.3 | 55.0 | Yes | No |
+| Greedy - Manhattan | 100% | 76.0 | 0.5 | 57.0 | 57.7 | Yes* | No |
+| Greedy - Euclidean | 100% | 68.7 | 0.4 | 49.3 | 54.7 | Yes* | No |
+| A* - Manhattan | 100% | 59.0 | 2.4 | 308.0 | 71.3 | Yes | Yes |
+| A* - Euclidean | 100% | 59.0 | 4.1 | 516.3 | 77.3 | Yes | Yes |
+| Hill Climbing | 100% | 82.7 | 1,789.4 | 2,406.0 | 381.3 | No | No |
+| Simulated Annealing | 100% | 82.7 | 2,785.2 | 3,204.0 | 381.3 | No | No |
+| Genetic Algorithm | 100% | 84.0 | 4,146.2 | 8,884.0 | 12,202.7 | No | No |
 
 `Yes*` refers to this finite graph implementation with a closed set, not the unrestricted infinite-depth tree-search form.
 
-The strongest overall classical method is Manhattan A*. It matches UCS's optimum while using about 73% fewer expansions on average. Greedy is fastest and uses the least work but sacrifices solution quality. BFS and IDS match in move depth, but IDS pays heavily for repeated depth-limited passes. DFS produces highly variable and much more expensive paths. The local methods found feasible routes for all selected seeds but required much more runtime and offered no proof of optimality; their educational value lies in showing optimization under limited memory and stochastic exploration.
+The strongest overall classical method is Manhattan A*. It matches UCS's optimum while using about 73% fewer expansions on average. BFS has the smallest mean memory proxy at 51 units; UCS remains close at 57.3. The Genetic Algorithm's 12,202.7 units expose the storage cost of maintaining a population. Greedy is fastest and uses the least work but sacrifices solution quality. IDS repeats substantial work while retaining a small frontier. The local methods find feasible routes but require more runtime and memory and provide no proof of optimality.
 
 ## 5. Visualization
 
 Search events are recorded independently from rendering. The trace contains expansion/candidate events, the current state, frontier size, and available `g`, `h`, and `f` values. Trace storage is capped and reports truncation explicitly, keeping IDS and long local runs safe.
 
-The web laboratory displays explored cells, the current state, and the final route. Local-search playback displays the best candidate path as it evolves. The comparison page charts selectable cost/runtime/work metrics and provides a theoretical decision matrix. Static report figures are exported from the same results. This satisfies the visualization requirement without changing algorithm behavior.
+The web laboratory displays explored cells, the current state, and the final route. Local-search playback displays the best candidate path as it evolves. The comparison page charts selectable cost, runtime, work, and memory metrics and provides a theoretical decision matrix. Static report figures are exported from the same results. This satisfies the visualization requirement without changing algorithm behavior.
 
-## 6. Phase 2 - Q-learning formulation
+## 6. Q-learning formulation
 
-The Q-learning agent uses the same state and four actions as Phase 1. Unlike search, the agent must learn action values from reward and experience.
+The Q-learning agent uses the same state representation and four actions as the search solvers. Unlike explicit search, the agent learns action values from reward and experience.
 
 The update is:
 
@@ -119,7 +119,7 @@ Reward shaping preserves the actual objective:
 
 The Q-table is initialized with a weak heuristic preference to reduce wasted early motion without hard-coding the final policy. The training output retains a complete midpoint snapshot at episode 700, a complete final snapshot at episode 1,400, a state lookup, the greedy policy, a learning curve, and a no-exploration evaluation trajectory.
 
-## 7. Phase 2 results and policy analysis
+## 7. Learning results and policy analysis
 
 | Seed | Training successes | Final 100 success | Evaluation | Policy cost | Runtime (ms) |
 |---:|---:|---:|:---:|---:|---:|
@@ -139,9 +139,13 @@ Reproducibility is explicit: all stochastic algorithms receive local seeded rand
 
 Limitations remain honest. Three seeds demonstrate the required comparison but do not establish performance over all warehouse distributions. Runtime depends on hardware. Tabular Q-learning scales poorly beyond the assignment-sized state space. Local-search quality depends on finite budgets. The reward-shaped policy is not guaranteed to match the true minimum-cost path. These limitations are analysis points rather than hidden defects.
 
-## 9. Conclusion
+## 9. Reflection and future improvements
 
-The project completes both phases on one coherent model. It demonstrates why guarantees matter: UCS and A* prove minimum weighted cost, BFS and IDS target depth, Greedy trades quality for speed, and local methods trade guarantees for stochastic exploration. Q-learning then replaces an explicit environment model with learned action values and produces a reliable final policy. The generated source, raw data, figures, Q-tables, tests, report, and interactive visualization form a reproducible evidence trail aligned with every technical requirement in the assignment brief.
+The shared model was the most important design decision: it made every result directly comparable and exposed the practical difference between move depth, weighted cost, search work, and retained memory. The experiments show that stronger guidance does not automatically mean higher memory use, and that population-based optimization pays a visible storage cost for diversity. The deterministic memory proxy is appropriate for explaining implementation structure, while a future extension should add process-level peak-byte profiling, more environment seeds, confidence intervals, and larger maps. A second extension would replace the tabular Q-function with function approximation while preserving the same evaluation contract.
+
+## 10. Conclusion
+
+The project integrates planning, stochastic optimization, and learning on one coherent model. It demonstrates why guarantees matter: UCS and A* prove minimum weighted cost, BFS and IDS target depth, Greedy trades quality for speed, and local methods trade guarantees for stochastic exploration. Q-learning then replaces explicit planning with learned action values and produces a reliable final policy. The generated source, raw data, figures, Q-tables, tests, report, and interactive visualization form a reproducible evidence trail aligned with every technical requirement in the assignment brief.
 
 ## Appendix A - reproducibility commands
 
@@ -151,10 +155,11 @@ Install packages from `requirements.txt`, start the API and web interface with `
 
 ## Appendix B - evidence files
 
-- `results/phase1_raw.csv`: one row per algorithm/seed run.
-- `results/phase1_summary.json`: means, standard deviations, success, and guarantees.
-- `results/phase1_comparison.png`: static comparison figure.
-- `results/phase2_summary.json`: training and policy metrics by seed.
+- `results/search_runs.csv`: one row per algorithm/seed run.
+- `results/search_summary.csv`: submission-ready comparison table including memory.
+- `results/search_summary.json`: means, standard deviations, success, and guarantees.
+- `results/search_comparison.png`: static comparison figure.
+- `results/learning_summary.json`: training and policy metrics by seed.
 - `results/q_values_midpoint.csv` and `q_values_final.csv`: complete Q-table snapshots.
-- `results/phase2_learning_curve.png`: learning evidence.
-- `results/phase2_policy.png`: evaluated final policy.
+- `results/learning_curve.png`: learning evidence.
+- `results/learned_policy.png`: evaluated final policy.

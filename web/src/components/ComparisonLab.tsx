@@ -13,12 +13,13 @@ import type { ComparisonRow } from "../lib/types";
 import { useLabStore } from "../store/useLabStore";
 import { ErrorBanner, LoadingPanel, MetricCard, PrimaryButton, SectionHeading } from "./Primitives";
 
-type Metric = "mean_path_cost" | "mean_runtime_ms" | "mean_work_units";
+type Metric = "mean_path_cost" | "mean_runtime_ms" | "mean_work_units" | "mean_memory_units";
 
 const METRICS: Array<{ id: Metric; label: string; unit: string }> = [
   { id: "mean_path_cost", label: "Path cost", unit: "cost units" },
   { id: "mean_runtime_ms", label: "Runtime", unit: "milliseconds" },
   { id: "mean_work_units", label: "Search work", unit: "nodes / evaluations" },
+  { id: "mean_memory_units", label: "Memory", unit: "memory units" },
 ];
 
 const FAMILY_COLORS: Record<string, string> = {
@@ -49,10 +50,17 @@ export function ComparisonLab() {
     ), null);
   }, [comparison]);
 
+  const leanest = useMemo(() => {
+    if (!comparison) return null;
+    return comparison.summary.reduce<ComparisonRow | null>((winner, row) => (
+      !winner || row.mean_memory_units < winner.mean_memory_units ? row : winner
+    ), null);
+  }, [comparison]);
+
   return (
     <div className="space-y-10 pb-24 pt-12">
       <SectionHeading
-        eyebrow="Phase 01 / Controlled experiment"
+        eyebrow="Evaluation / Controlled experiment"
         title="Compare evidence, not impressions."
         description="All eleven required configurations solve the same warehouse. The table separates measured behavior from theoretical guarantees so the conclusions stay fair and defensible."
       />
@@ -87,10 +95,11 @@ export function ComparisonLab() {
 
       {comparison && !loading && (
         <div className="space-y-5">
-          <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-3 lg:grid-cols-5">
             <MetricCard label="Configurations" value={comparison.summary.length} detail="all assignment methods" tone="violet" />
             <MetricCard label="Modeled states" value={comparison.state_space_size.toLocaleString()} detail="within 1K-10K target" tone="cyan" />
             <MetricCard label="Lowest cost" value={best?.mean_path_cost?.toFixed(1) ?? "--"} detail={best?.display_name ?? "no successful run"} tone="green" />
+            <MetricCard label="Leanest memory" value={Math.round(leanest?.mean_memory_units ?? 0).toLocaleString()} detail={`${leanest?.display_name ?? "no result"} / units`} tone="amber" />
             <MetricCard label="Successful" value={`${comparison.summary.filter((row) => row.success_rate > 0).length}/${comparison.summary.length}`} detail="configurations finding a route" tone="amber" />
           </div>
 
@@ -121,16 +130,20 @@ export function ComparisonLab() {
                 </BarChart>
               </ResponsiveContainer>
             </div>
+            <div className="memory-method-note">
+              <span>Memory methodology</span>
+              <p>Graph search reports peak frontier states; local search reports encoded action slots retained by its active trajectory or population. These deterministic implementation units support fair within-family comparisons without pretending to be operating-system byte measurements.</p>
+            </div>
           </section>
 
           <section className="glass-card overflow-hidden">
             <div className="flex flex-col gap-2 border-b border-white/[0.06] p-5 md:flex-row md:items-end md:justify-between md:p-7">
               <div><span className="eyebrow">Decision matrix</span><h3 className="font-display mt-2 text-xl font-semibold text-white">Measured and theoretical results</h3></div>
-              <p className="text-xs text-slate-600">Lower cost, runtime, and work are better.</p>
+              <p className="text-xs text-slate-600">Lower cost, runtime, work, and memory are better.</p>
             </div>
             <div className="overflow-x-auto">
               <table className="results-table">
-                <thead><tr><th>Configuration</th><th>Family</th><th>Success</th><th>Cost</th><th>Runtime</th><th>Work</th><th>Complete</th><th>Optimal</th></tr></thead>
+                <thead><tr><th>Configuration</th><th>Family</th><th>Success</th><th>Cost</th><th>Runtime</th><th>Work</th><th>Memory</th><th>Complete</th><th>Optimal</th></tr></thead>
                 <tbody>
                   {comparison.summary.map((row) => (
                     <tr key={row.algorithm}>
@@ -140,6 +153,7 @@ export function ComparisonLab() {
                       <td>{row.mean_path_cost?.toFixed(1) ?? "--"}</td>
                       <td>{row.mean_runtime_ms.toFixed(1)} ms</td>
                       <td>{Math.round(row.mean_work_units).toLocaleString()}</td>
+                      <td>{Math.round(row.mean_memory_units).toLocaleString()}</td>
                       <td><TheoryMark value={row.theoretically_complete} /></td>
                       <td><TheoryMark value={row.theoretically_optimal} /></td>
                     </tr>

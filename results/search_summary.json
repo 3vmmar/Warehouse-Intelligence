@@ -10,6 +10,8 @@
     "mean_runtime_ms": 7.792999997036532,
     "std_runtime_ms": 1.422572950091358,
     "mean_work_units": 1223.6666666666667,
+    "mean_memory_units": 51.0,
+    "std_memory_units": 17.776388834631177,
     "theoretically_complete": true,
     "theoretically_optimal": false,
     "optimality_scope": "Optimal in number of moves; not guaranteed minimum weighted terrain cost"
@@ -25,6 +27,8 @@
     "mean_runtime_ms": 6.99316665607815,
     "std_runtime_ms": 2.003794745700216,
     "mean_work_units": 1019.0,
+    "mean_memory_units": 287.0,
+    "std_memory_units": 32.2335229225724,
     "theoretically_complete": true,
     "theoretically_optimal": false,
     "optimality_scope": "Returns the first solution encountered"
@@ -40,6 +44,8 @@
     "mean_runtime_ms": 8.52880000214403,
     "std_runtime_ms": 1.6918741838628275,
     "mean_work_units": 1152.6666666666667,
+    "mean_memory_units": 57.333333333333336,
+    "std_memory_units": 22.233608194203057,
     "theoretically_complete": true,
     "theoretically_optimal": true,
     "optimality_scope": "Minimum total terrain cost because every edge cost is positive"
@@ -55,6 +61,8 @@
     "mean_runtime_ms": 790.2825333391471,
     "std_runtime_ms": 472.7840943176711,
     "mean_work_units": 132846.33333333334,
+    "mean_memory_units": 55.0,
+    "std_memory_units": 11.135528725660043,
     "theoretically_complete": true,
     "theoretically_optimal": false,
     "optimality_scope": "Optimal in depth (moves), not weighted terrain cost"
@@ -70,6 +78,8 @@
     "mean_runtime_ms": 0.45420000484834117,
     "std_runtime_ms": 0.13815744335985325,
     "mean_work_units": 57.0,
+    "mean_memory_units": 57.666666666666664,
+    "std_memory_units": 11.846237095944574,
     "theoretically_complete": true,
     "theoretically_optimal": false,
     "optimality_scope": "Complete on this finite graph with a closed set, but not cost-optimal"
@@ -85,6 +95,8 @@
     "mean_runtime_ms": 0.37880000309087336,
     "std_runtime_ms": 0.11568444780294874,
     "mean_work_units": 49.333333333333336,
+    "mean_memory_units": 54.666666666666664,
+    "std_memory_units": 14.011899704655802,
     "theoretically_complete": true,
     "theoretically_optimal": false,
     "optimality_scope": "Complete on this finite graph with a closed set, but not cost-optimal"
@@ -100,6 +112,8 @@
     "mean_runtime_ms": 2.4199333274737,
     "std_runtime_ms": 1.9364168198196403,
     "mean_work_units": 308.0,
+    "mean_memory_units": 71.33333333333333,
+    "std_memory_units": 18.475208614068023,
     "theoretically_complete": true,
     "theoretically_optimal": true,
     "optimality_scope": "Minimum total terrain cost with either provided admissible, consistent heuristic"
@@ -115,6 +129,8 @@
     "mean_runtime_ms": 4.066533331448833,
     "std_runtime_ms": 2.2623146968363668,
     "mean_work_units": 516.3333333333334,
+    "mean_memory_units": 77.33333333333333,
+    "std_memory_units": 12.342339054382412,
     "theoretically_complete": true,
     "theoretically_optimal": true,
     "optimality_scope": "Minimum total terrain cost with either provided admissible, consistent heuristic"
@@ -130,6 +146,8 @@
     "mean_runtime_ms": 1789.4478333376658,
     "std_runtime_ms": 864.188966790303,
     "mean_work_units": 2406.0,
+    "mean_memory_units": 381.3333333333333,
+    "std_memory_units": 73.9008344562721,
     "theoretically_complete": false,
     "theoretically_optimal": false,
     "optimality_scope": "May stop at a local optimum; random restarts improve robustness"
@@ -145,6 +163,8 @@
     "mean_runtime_ms": 2785.201466661723,
     "std_runtime_ms": 1163.4805726982927,
     "mean_work_units": 3204.0,
+    "mean_memory_units": 381.3333333333333,
+    "std_memory_units": 73.9008344562721,
     "theoretically_complete": false,
     "theoretically_optimal": false,
     "optimality_scope": "Probabilistically escapes local optima; finite cooling has no optimality guarantee"
@@ -160,6 +180,8 @@
     "mean_runtime_ms": 4146.193566673901,
     "std_runtime_ms": 1553.7169623372065,
     "mean_work_units": 8884.0,
+    "mean_memory_units": 12202.666666666666,
+    "std_memory_units": 2364.826702600707,
     "theoretically_complete": false,
     "theoretically_optimal": false,
     "optimality_scope": "Population search can discover high-quality paths but has no finite optimality guarantee"
